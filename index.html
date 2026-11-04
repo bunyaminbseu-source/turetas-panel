@@ -171,6 +171,7 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .dz-Bekliyor{background:var(--panel-2);color:var(--muted);border-color:var(--line)}
 .dz-Çizim{background:var(--info-soft);color:var(--info)}
 .dz-Revizyonda{background:var(--warn-soft);color:var(--warn)}
+.dz-Onay{background:rgba(106,94,214,.11);color:var(--mim)}
 .dz-Teslim{background:var(--ok-soft);color:var(--ok)}
 .dz-Kapsam{background:transparent;color:var(--faint);border:1px dashed var(--line)}
 .dz-Kapsam::before{background:transparent;border:1px solid currentColor}
@@ -205,6 +206,7 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .kutu.on.k-Bekliyor{color:var(--ink)}
 .kutu.on.k-Çizim{color:var(--info);background:var(--info-soft)}
 .kutu.on.k-Revizyonda{color:var(--warn);background:var(--warn-soft)}
+.kutu.on.k-Onay{color:var(--mim);background:rgba(106,94,214,.11)}
 .kutu.on.k-Teslim{color:var(--ok);background:var(--ok-soft)}
 .kutu.on.k-Kapsam{color:var(--faint)}
 .fld>span>span{letter-spacing:0}
@@ -347,9 +349,9 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 "use strict";
 
 /* =================== Sabitler =================== */
-var DISIPLIN_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi','Kapsam dışı'];
-var CIZIM_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi'];
-var SECENEK = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi','Kapsam dışı'];
+var DISIPLIN_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Onay sürecinde','Teslim edildi','Kapsam dışı'];
+var CIZIM_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Onay sürecinde','Teslim edildi'];
+var SECENEK = ['Bekliyor','Çizim aşamasında','Revizyonda','Onay sürecinde','Teslim edildi','Kapsam dışı'];
 var KAPSAMLAR = ['Elektrik + Mekanik','Sadece Elektrik','Sadece Mekanik'];
 function kapsamOf(p){ var e=dd(p.elektrik)==='Kapsam dışı', m=dd(p.mekanik)==='Kapsam dışı'; return e&&!m?'Sadece Mekanik':(m&&!e?'Sadece Elektrik':'Elektrik + Mekanik') }
 var ESKI = {'Başlamadı':'Bekliyor','Çizimde':'Çizim aşamasında','Kontrolde':'Çizim aşamasında','Bitti':'Teslim edildi'};
