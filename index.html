@@ -208,6 +208,18 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .kutu.on.k-Teslim{color:var(--ok);background:var(--ok-soft)}
 .kutu.on.k-Kapsam{color:var(--faint)}
 .fld>span>span{letter-spacing:0}
+.kapsam{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cb{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;background:var(--panel-2);min-width:0}
+.cb:hover{border-color:var(--faint)}
+.cb input{position:absolute;opacity:0;pointer-events:none}
+.cb-k{width:22px;height:22px;border-radius:6px;border:2px solid var(--faint);flex:none;display:grid;place-items:center;background:var(--panel)}
+.cb b{display:block;font-weight:600;font-size:14px}
+.cb small{display:block;color:var(--muted);font-size:12px}
+.cb>span:last-child{min-width:0}
+.cb:has(input:checked){border-color:var(--brass);background:var(--brass-soft)}
+.cb input:checked+.cb-k{background:var(--brass);border-color:var(--brass)}
+.cb input:checked+.cb-k::after{content:"";width:6px;height:11px;border:solid var(--brass-ink);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.cb input:focus-visible+.cb-k{outline:2px solid var(--brass);outline-offset:2px}
 .drop.mini{padding:12px 14px;cursor:pointer}
 .drop.mini .ic{width:34px;height:34px}
 .drop.mini p{min-width:0}
@@ -217,7 +229,7 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .bedel-b{display:block;font:700 22px/38px var(--f-display);letter-spacing:0;text-transform:none;color:var(--ink);font-variant-numeric:tabular-nums}
 .bedel-b .bos{color:var(--faint);font:400 13px/38px var(--f-body)}
-.kapsam-yok{display:block;font:400 13px/38px var(--f-body);letter-spacing:0;text-transform:none;color:var(--faint)}
+.kapsam-yok{display:block;font-style:normal;font:400 13px/34px var(--f-body);letter-spacing:0;text-transform:none;color:var(--faint)}
 .fact{background:var(--panel);padding:11px 13px;min-width:0}
 .fact span{display:block;font:500 10.5px/1.2 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
 .fact b{font-weight:500;font-size:13.5px;display:block;overflow-wrap:anywhere}
@@ -640,8 +652,8 @@ function cekmeceHTML(){
       '<h2>'+esc(p.ad)+'</h2>'+
       '<div class="meta">'+esc(m.ad||'—')+(m.firma?' · '+esc(m.firma):'')+(p.konum?' · '+esc(p.konum):'')+'</div>'+
       '<div class="quick">'+
-        '<div class="q-row"><span><span style="color:var(--ele)">●</span> Elektrik</span>'+secim('q-elektrik',dd(p.elektrik))+'</div>'+
-        '<div class="q-row"><span><span style="color:var(--mek)">●</span> Mekanik</span>'+secim('q-mekanik',dd(p.mekanik))+'</div>'+
+        '<div class="q-row"><span><span style="color:var(--ele)">●</span> Elektrik</span>'+(dd(p.elektrik)==='Kapsam dışı'?'<em class="kapsam-yok">Bu işte yok</em>':secim('q-elektrik',dd(p.elektrik),CIZIM_DURUM))+'</div>'+
+        '<div class="q-row"><span><span style="color:var(--mek)">●</span> Mekanik</span>'+(dd(p.mekanik)==='Kapsam dışı'?'<em class="kapsam-yok">Bu işte yok</em>':secim('q-mekanik',dd(p.mekanik),CIZIM_DURUM))+'</div>'+
       '</div>'+
     '</div>'+
     '<div class="dr-body">'+
@@ -682,8 +694,10 @@ function modalHTML(){
         fld('Mimar','<select class="inp" id="p-mimarId" required><option value="">Mimar seçin</option>'+mm.map(function(m){return '<option value="'+esc(m.id)+'"'+(m.id===p.mimarId?' selected':'')+'>'+esc(m.ad)+'</option>'}).join('')+'</select>',true)+
         fld('İş adı','<input class="inp" id="p-ad" required value="'+esc(p.ad)+'" placeholder="Örn. Yılmaz Villası">',true)+
         '<div class="fld full"><span>Mimari plan</span><label class="drop mini" id="p-plan-drop"><span class="ic">'+ICON.up+'</span><p><b id="p-plan-ad">'+(M.id?'Mimari klasörüne dosya ekle':'Mimari planı ekleyin')+'</b>DWG, PDF, DXF… isteğe bağlı, birden fazla seçebilirsiniz</p><span class="btn sm">Dosya seç</span><input type="file" id="p-plan" multiple hidden></label></div>'+
-        '<div class="fld full"><span><span style="color:var(--ele)">●</span> Elektrik durumu</span>'+secim('p-elektrik',dd(p.elektrik))+'</div>'+
-        '<div class="fld full"><span><span style="color:var(--mek)">●</span> Mekanik durumu</span>'+secim('p-mekanik',dd(p.mekanik))+'</div>'+
+        '<div class="fld full"><span>İş kapsamı</span><div class="kapsam">'+
+          kutuCb('p-k-elektrik','Elektrik','var(--ele)', M.id && dd(p.elektrik)!=='Kapsam dışı')+
+          kutuCb('p-k-mekanik','Mekanik','var(--mek)', M.id && dd(p.mekanik)!=='Kapsam dışı')+
+        '</div></div>'+
         fld('İş bedeli (₺)','<input class="inp" id="p-bedel" inputmode="numeric" value="'+esc(sayi(p.bedel)?new Intl.NumberFormat('tr-TR').format(sayi(p.bedel)):'')+'" placeholder="Örn. 45.000">',true)+
         fld('Not','<textarea class="inp" id="p-notlar" placeholder="Mimarın istekleri, revizyon notları…">'+esc(p.notlar)+'</textarea>',true)+
       '</form>';
@@ -697,10 +711,13 @@ function modalHTML(){
       '<button class="btn '+(M.tur==='onay'?'pri danger':'pri')+'" data-act="modalTamam" '+(M.tur==='onay'?'style="background:var(--bad);border-color:var(--bad);color:#fff"':'')+'>'+(M.tur==='onay'?esc(M.dugme||'Sil'):'Kaydet')+'</button></div></div>'+
   '</div></div>';
 }
-function secim(id, deger){
-  return '<div class="secim" id="'+id+'" role="radiogroup">'+SECENEK.map(function(d){
+function secim(id, deger, liste){
+  return '<div class="secim" id="'+id+'" role="radiogroup">'+(liste||SECENEK).map(function(d){
     return '<button type="button" role="radio" aria-checked="'+(d===deger)+'" class="kutu k-'+d.split(' ')[0]+(d===deger?' on':'')+'" data-deger="'+esc(d)+'">'+(d==='Kapsam dışı'?'Bu işte yok':esc(d))+'</button>';
   }).join('')+'</div>';
+}
+function kutuCb(id, ad, renk, acik){
+  return '<label class="cb" for="'+id+'"><input type="checkbox" id="'+id+'"'+(acik?' checked':'')+'><span class="cb-k"></span><span><b><span style="color:'+renk+'">●</span> '+ad+'</b><small>'+ad+' projesi çizilecek</small></span></label>';
 }
 function secilen(id){ var b=$('#'+id+' .kutu.on'); return b?b.getAttribute('data-deger'):'Bekliyor' }
 function fld(ad, inp, full){ return '<label class="fld'+(full?' full':'')+'"><span>'+ad+'</span>'+inp+'</label>' }
@@ -794,8 +811,10 @@ function modalTamam(){
     if(!v.ad){ err.textContent='İşe bir ad verin.'; return }
     v.bedel=String(sayi(v.bedel)||'');
     v.gelis = M.id ? ((proje(M.id)||{}).gelis || iso(bugun())) : iso(bugun());
-    v.elektrik=secilen('p-elektrik'); v.mekanik=secilen('p-mekanik');
-    if(v.elektrik==='Kapsam dışı' && v.mekanik==='Kapsam dışı'){ err.textContent='Elektrik ya da mekaniğin en az biri bu işte olmalı.'; return }
+    var eski=M.id?proje(M.id):{}, ke=$('#p-k-elektrik').checked, km=$('#p-k-mekanik').checked;
+    if(!ke && !km){ err.textContent='İş kapsamında Elektrik, Mekanik ya da ikisini birden işaretleyin.'; return }
+    v.elektrik = ke ? (eski.elektrik && dd(eski.elektrik)!=='Kapsam dışı' ? dd(eski.elektrik) : 'Bekliyor') : 'Kapsam dışı';
+    v.mekanik  = km ? (eski.mekanik  && dd(eski.mekanik)!=='Kapsam dışı'  ? dd(eski.mekanik)  : 'Bekliyor') : 'Kapsam dışı';
     if(M.id) v=Object.assign({}, proje(M.id), v);
     var planlar=Array.prototype.slice.call(($('#p-plan')||{}).files||[]);
     if(M.id) v.id=M.id;
