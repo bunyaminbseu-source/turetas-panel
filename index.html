@@ -556,7 +556,6 @@ function appHTML(){
       '<h1>'+baslik+'</h1><div class="top-sub">'+alt+'</div></div>'+
       '<div class="actions">'+
         (secili?'<button class="btn ghost hide-m" data-act="mimarDuzenle">Mimarı düzenle</button>':'')+
-        (D.klasorUrl?'<a class="btn ghost hide-m" href="'+esc(D.klasorUrl)+'" target="_blank" rel="noopener">'+ICON.folder+'Drive klasörü</a>':'')+
         '<button class="btn ghost" data-act="yeniMimar">'+ICON.plus+'Mimar</button>'+
         '<button class="btn pri" data-act="yeniIs">'+ICON.plus+'Yeni iş</button>'+
       '</div></div>'+
@@ -665,7 +664,7 @@ function cekmeceHTML(){
         fact('İş bedeli',para(p.bedel)||'—')+fact('Ekleyen',p.olusturan||'—')+
       '</div>'+
       '<div class="note">'+esc(p.notlar)+'</div>'+
-      '<div class="sec-t"><h3>Çizimler ve belgeler</h3>'+(p.klasorId&&GAS?'<a class="btn sm ghost" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/'+esc(p.klasorId)+'">'+ICON.folder+'Drive\'da aç</a>':'')+'</div>'+
+      '<div class="sec-t"><h3>Çizimler ve belgeler</h3>'+''+'</div>'+
       '<div class="tabs">'+sekmeler+'</div>'+
       '<label class="drop" id="drop"><span class="ic">'+ICON.up+'</span><p><b>'+aktifD.ad+' klasörüne dosya ekle</b>DWG, PDF, DXF, Excel, fotoğraf… Sürükleyin ya da dokunup seçin. En fazla '+MAX_MB+' MB.</p>'+
         '<span class="btn sm">Dosya seç</span><input type="file" id="dosya" multiple hidden></label>'+
