@@ -234,7 +234,7 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 
 /* ---------- Modal / form ---------- */
 .modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.modal .scrim{position:absolute}
+.modal .scrim{position:absolute;z-index:0}
 .card{position:relative;z-index:1;background:var(--panel);border-radius:14px;box-shadow:var(--shadow-lg);width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;animation:pop .2s cubic-bezier(.2,.8,.2,1)}
 @keyframes pop{from{transform:translateY(8px) scale(.99);opacity:0}}
 .card-h{padding:20px 22px 0}
@@ -665,8 +665,7 @@ function modalHTML(){
         fld('İş adı','<input class="inp" id="p-ad" required value="'+esc(p.ad)+'" placeholder="Örn. Yılmaz Villası">',true)+
         fld('Konum','<input class="inp" id="p-konum" value="'+esc(p.konum)+'" placeholder="İl / ilçe, ada-parsel">')+
         fld('Yapı türü','<select class="inp" id="p-tur"><option value="">Seçin</option>'+TURLER.map(function(t){return '<option'+(t===p.tur?' selected':'')+'>'+t+'</option>'}).join('')+'</select>')+
-        fld('Geliş tarihi','<input class="inp" id="p-gelis" type="date" value="'+esc(p.gelis)+'">')+
-        fld('Teslim tarihi','<input class="inp" id="p-teslim" type="date" value="'+esc(p.teslim)+'">')+
+        fld('Teslim tarihi','<input class="inp" id="p-teslim" type="date" value="'+esc(p.teslim)+'">',true)+
         fld('Sorumlu','<input class="inp" id="p-sorumlu" value="'+esc(p.sorumlu)+'" placeholder="Çizimi kim yapıyor">')+
         fld('Öncelik',sec('p-oncelik',p.oncelik||'Normal',['Normal','Acil']))+
         fld('Proje kapsamı',sec('p-kapsam',kapsamOf(p),KAPSAMLAR),true)+
@@ -767,10 +766,11 @@ function modalTamam(){
     if(!v.ad){ err.textContent='Mimarın adını yazın.'; return }
     if(M.id) v.id=M.id;
   } else if(M.tur==='is'){
-    ['mimarId','ad','konum','tur','gelis','teslim','sorumlu','oncelik','elektrik','mekanik','bedel','notlar'].forEach(function(k){ v[k]=$('#p-'+k).value.trim() });
+    ['mimarId','ad','konum','tur','teslim','sorumlu','oncelik','elektrik','mekanik','bedel','notlar'].forEach(function(k){ v[k]=$('#p-'+k).value.trim() });
     if(!v.mimarId){ err.textContent='İşin geldiği mimarı seçin.'; return }
     if(!v.ad){ err.textContent='İşe bir ad verin.'; return }
     v.bedel=String(sayi(v.bedel)||'');
+    v.gelis = M.id ? ((proje(M.id)||{}).gelis || iso(bugun())) : iso(bugun());
     var kap=$('#p-kapsam').value;
     if(kap==='Sadece Elektrik') v.mekanik='Kapsam dışı';
     if(kap==='Sadece Mekanik') v.elektrik='Kapsam dışı';
