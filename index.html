@@ -640,8 +640,8 @@ function cekmeceHTML(){
         return '<div class="file"><span class="ext '+extSinif(e)+'">'+esc((e||'—').toUpperCase().slice(0,4))+'</span>'+
           '<span class="fn"><b title="'+esc(f.ad)+'">'+esc(f.ad)+'</b><small class="num">'+boyut(f.boyut)+' · '+esc(goreli(f.tarih))+(f.ekleyen?' · '+esc(f.ekleyen):'')+'</small></span>'+
           '<span class="fa">'+
-            (f.url?'<a class="btn sm ghost" href="'+esc(f.url)+'" target="_blank" rel="noopener">Aç</a>':'')+
-            (f.indir?'<a class="btn sm ghost" href="'+esc(f.indir)+'" target="_blank" rel="noopener" title="İndir">'+ICON.dl+'</a>':'')+
+            (/^(pdf|jpe?g|png|gif|webp|txt)$/.test(e)?'<button class="btn sm ghost" data-dac="'+esc(f.id)+'">Aç</button>':'')+
+            '<button class="btn sm ghost" title="İndir" data-dindir="'+esc(f.id)+'">'+ICON.dl+'İndir</button>'+
             '<button class="btn sm ghost danger" title="Sil" data-dsil="'+esc(f.id)+'">'+ICON.trash+'</button>'+
           '</span></div>';
       }).join('') : '<div class="empty"><b>'+aktifD.ad+' klasörü boş</b>Dosyaları yukarıdaki alana sürükleyin ya da seçin.</div>')+
@@ -752,6 +752,8 @@ document.addEventListener('click',function(e){
     if(grp.id==='q-elektrik'||grp.id==='q-mekanik') hizliDurum(grp.id.slice(2), k.getAttribute('data-deger'));
     return;
   }
+  var dx=e.target.closest('[data-dac],[data-dindir]');
+  if(dx){ dosyaAl(dx.getAttribute('data-dac')||dx.getAttribute('data-dindir'), dx.hasAttribute('data-dac'), dx); return }
   var t=e.target.closest('[data-act],[data-mimar],[data-is],[data-filtre],[data-sekme],[data-dsil],[data-grp],[data-yeniis]');
   if(!t) return;
   if(t.hasAttribute('data-grp')){ var g=t.getAttribute('data-grp'); S.kapali[g]=!S.kapali[g]; ciz(); return }
@@ -837,6 +839,20 @@ function modalTamam(){
   }
 }
 
+function dosyaAl(fid, acmak, btn){
+  var pencere = null;
+  if(acmak){ try{ pencere = window.open('', '_blank') }catch(e){} }
+  var eski = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spin" style="width:12px;height:12px;margin:0"></span>';
+  call('dosyaIndir',{projeId:S.acik, disiplin:S.sekme, dosyaId:fid}).then(function(r){
+    var ikili = atob(r.base64), dizi = new Uint8Array(ikili.length);
+    for(var i=0;i<ikili.length;i++) dizi[i] = ikili.charCodeAt(i);
+    var url = URL.createObjectURL(new Blob([dizi], {type:r.tur}));
+    if(pencere){ pencere.location.href = url }
+    else { var a=document.createElement('a'); a.href=url; a.download=r.ad; document.body.appendChild(a); a.click(); a.remove() }
+    setTimeout(function(){ URL.revokeObjectURL(url) }, 120000);
+  }).catch(function(e){ if(pencere) try{ pencere.close() }catch(x){} toast(e.message, true) })
+    .then(function(){ btn.disabled = false; btn.innerHTML = eski });
+}
 function dosyaSilSor(fid){
   var f=(S.dosyalar[S.sekme]||[]).find(function(x){return x.id===fid}); if(!f) return;
   S.modal={tur:'onay',baslik:'Dosya silinsin mi?',metin:f.ad+' Drive çöp kutusuna taşınır.',is:'dosyaSil',veri:{projeId:S.acik,disiplin:S.sekme,dosyaId:fid},dugme:'Dosyayı sil'};
@@ -952,6 +968,7 @@ function demo(islem, v){
         var pp=D.projeler.find(function(x){return x.id===v.projeId});
         log(pp.kod+' › dosya ekledi: '+v.ad); return res({ok:true});
       }
+      if(islem==='dosyaIndir'){ throw new Error('Önizlemede örnek dosyalar indirilemez.') }
       if(islem==='dosyaSil'){ var G=D.dosyalar[v.projeId]; G[v.disiplin]=G[v.disiplin].filter(function(f){return f.id!==v.dosyaId}); return res({ok:true}) }
       throw new Error('Bilinmeyen işlem');
     }catch(e){ rej(e) }
