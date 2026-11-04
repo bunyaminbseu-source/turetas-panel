@@ -148,7 +148,7 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .grp-sum b{font:600 15px/1 var(--f-body);font-variant-numeric:tabular-nums}
 .grp-act{display:flex;gap:6px;flex:none}
 
-.jobs-head,.job{display:grid;grid-template-columns:78px minmax(0,1fr) 168px 168px 104px 120px;gap:14px;align-items:center;padding:0 18px}
+.jobs-head,.job{display:grid;grid-template-columns:78px minmax(0,1fr) 168px 168px 120px;gap:14px;align-items:center;padding:0 18px}
 .jobs-head{height:34px;font:500 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line-2)}
 .jobs-head .r,.job .para{text-align:right}
 .job{min-height:60px;border-bottom:1px solid var(--line-2);width:100%;text-align:left;background:none;border-left:0;border-right:0;border-top:0;color:var(--ink);padding-block:10px}
@@ -193,7 +193,25 @@ h1{font:700 30px/1.1 var(--f-display);letter-spacing:-.015em;margin:0;text-wrap:
 .x{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--muted)}
 .dr-head h2{margin:0;font:700 24px/1.15 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
 .dr-head .meta{color:var(--muted);margin-top:6px;font-size:13px}
-.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.quick{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.q-row{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:center}
+.q-row>span{font:500 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.secim{display:flex;flex-wrap:wrap;gap:6px}
+.kutu{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 11px;font-size:13px;font-weight:500;color:var(--muted);line-height:1.2}
+.kutu::before{content:"";width:14px;height:14px;border-radius:4px;border:1.5px solid var(--faint);flex:none;box-sizing:border-box}
+.kutu:hover{border-color:var(--faint)}
+.kutu.on{border-color:currentColor;background:var(--panel-2)}
+.kutu.on::before{border-color:currentColor;background:currentColor;box-shadow:inset 0 0 0 2.5px var(--panel)}
+.kutu.on.k-Bekliyor{color:var(--ink)}
+.kutu.on.k-Çizim{color:var(--info);background:var(--info-soft)}
+.kutu.on.k-Revizyonda{color:var(--warn);background:var(--warn-soft)}
+.kutu.on.k-Teslim{color:var(--ok);background:var(--ok-soft)}
+.kutu.on.k-Kapsam{color:var(--faint)}
+.fld>span>span{letter-spacing:0}
+.drop.mini{padding:12px 14px;cursor:pointer}
+.drop.mini .ic{width:34px;height:34px}
+.drop.mini p{min-width:0}
+.drop.mini p b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .quick label{display:flex;flex-direction:column;gap:5px;font:500 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .dr-body{flex:1;overflow:auto;padding:20px 24px 32px;display:flex;flex-direction:column;gap:20px}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
@@ -276,7 +294,7 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .m-only{display:none}
 @media (max-width:1040px){
   .jobs-head{display:none}
-  .job{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"ttl para" "e m" "tar tar";gap:8px 12px;padding:14px 16px}
+  .job{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"ttl para" "e m";gap:8px 12px;padding:14px 16px}
   .job .kod{display:none}
   .job .ttl{grid-area:ttl}.job .para{grid-area:para}.job .tar{grid-area:tar}
   .job .de{grid-area:e;min-width:0}.job .dm{grid-area:m;min-width:0}
@@ -302,7 +320,7 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
   .ttab{min-width:0;flex:1}
   .grp-h{flex-wrap:wrap}.grp-sum{text-align:left}
   .dr-head{padding:16px 16px 14px}.dr-body{padding:16px 16px 28px}
-  .quick{grid-template-columns:1fr}
+  .q-row{grid-template-columns:1fr;gap:6px}
   .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .form{grid-template-columns:1fr}
   .actions .btn.ghost.hide-m{display:none}
@@ -319,6 +337,7 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 /* =================== Sabitler =================== */
 var DISIPLIN_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi','Kapsam dışı'];
 var CIZIM_DURUM = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi'];
+var SECENEK = ['Bekliyor','Çizim aşamasında','Revizyonda','Teslim edildi','Kapsam dışı'];
 var KAPSAMLAR = ['Elektrik + Mekanik','Sadece Elektrik','Sadece Mekanik'];
 function kapsamOf(p){ var e=dd(p.elektrik)==='Kapsam dışı', m=dd(p.mekanik)==='Kapsam dışı'; return e&&!m?'Sadece Mekanik':(m&&!e?'Sadece Elektrik':'Elektrik + Mekanik') }
 var ESKI = {'Başlamadı':'Bekliyor','Çizimde':'Çizim aşamasında','Kontrolde':'Çizim aşamasında','Bitti':'Teslim edildi'};
@@ -561,11 +580,12 @@ function grupHTML(g){
       '<div class="grp-act"><button class="btn sm" data-yeniis="'+esc(m.id)+'">'+ICON.plus+'İş ekle</button></div>'+
     '</div>'+
     (kap?'':(g.ps.length?
-      '<div class="jobs-head"><span>Kod</span><span>Proje</span><span>Elektrik</span><span>Mekanik</span><span>Teslim</span><span class="r">Bedel</span></div>'+g.ps.map(isSatiri).join('')
+      '<div class="jobs-head"><span>Kod</span><span>Proje</span><span>Elektrik</span><span>Mekanik</span><span class="r">Bedel</span></div>'+g.ps.map(isSatiri).join('')
       : '<div class="grp-bos">'+bos+'</div>'))+
   '</section>';
 }
 
+function kisa(t){ t=String(t||'').replace(/\s+/g,' ').trim(); return t.length>70?t.slice(0,70)+'…':t }
 function dz(v, lbl){
   v=dd(v);
   if(v==='Kapsam dışı') return '<span class="dz dz-Kapsam"><em>'+lbl+'</em>Yok</span>';
@@ -574,10 +594,9 @@ function dz(v, lbl){
 function isSatiri(p){
   return '<button class="job" data-is="'+esc(p.id)+'">'+
     '<span class="kod">'+esc(p.kod)+(p.oncelik==='Acil'?'<br><i>ACİL</i>':'')+'</span>'+
-    '<span class="ttl"><b data-kod="'+esc(p.kod)+'">'+esc(p.ad)+'</b><small>'+esc([p.tur,p.konum,p.sorumlu?('Sorumlu: '+p.sorumlu):''].filter(Boolean).join(' · ')||'—')+'</small></span>'+
+    '<span class="ttl"><b data-kod="'+esc(p.kod)+'">'+esc(p.ad)+'</b><small>'+esc(kisa(p.notlar)||('Eklenme: '+tr(p.gelis)))+'</small></span>'+
     '<span class="de">'+dz(p.elektrik,'ELK')+'</span>'+
     '<span class="dm">'+dz(p.mekanik,'MEK')+'</span>'+
-    '<span class="tar">'+(p.teslim?tr(p.teslim):'—')+'</span>'+
     '<span class="para'+(sayi(p.bedel)?'':' yok')+'">'+(para(p.bedel)||'—')+'</span>'+
   '</button>';
 }
@@ -621,15 +640,14 @@ function cekmeceHTML(){
       '<h2>'+esc(p.ad)+'</h2>'+
       '<div class="meta">'+esc(m.ad||'—')+(m.firma?' · '+esc(m.firma):'')+(p.konum?' · '+esc(p.konum):'')+'</div>'+
       '<div class="quick">'+
-        (dd(p.elektrik)==='Kapsam dışı'?'<label><span><span style="color:var(--ele)">●</span> Elektrik</span><b class="kapsam-yok">Bu işte yok</b></label>':'<label><span><span style="color:var(--ele)">●</span> Elektrik</span>'+sec('q-elektrik',dd(p.elektrik),CIZIM_DURUM)+'</label>')+
-        (dd(p.mekanik)==='Kapsam dışı'?'<label><span><span style="color:var(--mek)">●</span> Mekanik</span><b class="kapsam-yok">Bu işte yok</b></label>':'<label><span><span style="color:var(--mek)">●</span> Mekanik</span>'+sec('q-mekanik',dd(p.mekanik),CIZIM_DURUM)+'</label>')+
-        '<label>İş bedeli<b class="bedel-b">'+(para(p.bedel)||'<span class="bos">Girilmedi</span>')+'</b></label>'+
+        '<div class="q-row"><span><span style="color:var(--ele)">●</span> Elektrik</span>'+secim('q-elektrik',dd(p.elektrik))+'</div>'+
+        '<div class="q-row"><span><span style="color:var(--mek)">●</span> Mekanik</span>'+secim('q-mekanik',dd(p.mekanik))+'</div>'+
       '</div>'+
     '</div>'+
     '<div class="dr-body">'+
       '<div class="facts">'+
-        fact('Geliş',tr(p.gelis))+fact('Teslim',tr(p.teslim))+
-        fact('Yapı türü',p.tur||'—')+fact('Sorumlu',p.sorumlu||'—')+
+        fact('Eklenme',tr(p.gelis))+fact('Mimar',m.ad||'—')+
+        fact('İş bedeli',para(p.bedel)||'—')+fact('Ekleyen',p.olusturan||'—')+
       '</div>'+
       '<div class="note">'+esc(p.notlar)+'</div>'+
       '<div class="sec-t"><h3>Çizimler ve belgeler</h3>'+(p.klasorId&&GAS?'<a class="btn sm ghost" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/'+esc(p.klasorId)+'">'+ICON.folder+'Drive\'da aç</a>':'')+'</div>'+
@@ -663,16 +681,11 @@ function modalHTML(){
       '<form class="form" id="f">'+
         fld('Mimar','<select class="inp" id="p-mimarId" required><option value="">Mimar seçin</option>'+mm.map(function(m){return '<option value="'+esc(m.id)+'"'+(m.id===p.mimarId?' selected':'')+'>'+esc(m.ad)+'</option>'}).join('')+'</select>',true)+
         fld('İş adı','<input class="inp" id="p-ad" required value="'+esc(p.ad)+'" placeholder="Örn. Yılmaz Villası">',true)+
-        fld('Konum','<input class="inp" id="p-konum" value="'+esc(p.konum)+'" placeholder="İl / ilçe, ada-parsel">')+
-        fld('Yapı türü','<select class="inp" id="p-tur"><option value="">Seçin</option>'+TURLER.map(function(t){return '<option'+(t===p.tur?' selected':'')+'>'+t+'</option>'}).join('')+'</select>')+
-        fld('Teslim tarihi','<input class="inp" id="p-teslim" type="date" value="'+esc(p.teslim)+'">',true)+
-        fld('Sorumlu','<input class="inp" id="p-sorumlu" value="'+esc(p.sorumlu)+'" placeholder="Çizimi kim yapıyor">')+
-        fld('Öncelik',sec('p-oncelik',p.oncelik||'Normal',['Normal','Acil']))+
-        fld('Proje kapsamı',sec('p-kapsam',kapsamOf(p),KAPSAMLAR),true)+
-        '<label class="fld" id="w-elektrik"'+(kapsamOf(p)==='Sadece Mekanik'?' hidden':'')+'><span>Elektrik durumu</span>'+sec('p-elektrik',dd(p.elektrik)==='Kapsam dışı'?'Bekliyor':dd(p.elektrik),CIZIM_DURUM)+'</label>'+
-        '<label class="fld" id="w-mekanik"'+(kapsamOf(p)==='Sadece Elektrik'?' hidden':'')+'><span>Mekanik durumu</span>'+sec('p-mekanik',dd(p.mekanik)==='Kapsam dışı'?'Bekliyor':dd(p.mekanik),CIZIM_DURUM)+'</label>'+
+        '<div class="fld full"><span>Mimari plan</span><label class="drop mini" id="p-plan-drop"><span class="ic">'+ICON.up+'</span><p><b id="p-plan-ad">'+(M.id?'Mimari klasörüne dosya ekle':'Mimari planı ekleyin')+'</b>DWG, PDF, DXF… isteğe bağlı, birden fazla seçebilirsiniz</p><span class="btn sm">Dosya seç</span><input type="file" id="p-plan" multiple hidden></label></div>'+
+        '<div class="fld full"><span><span style="color:var(--ele)">●</span> Elektrik durumu</span>'+secim('p-elektrik',dd(p.elektrik))+'</div>'+
+        '<div class="fld full"><span><span style="color:var(--mek)">●</span> Mekanik durumu</span>'+secim('p-mekanik',dd(p.mekanik))+'</div>'+
         fld('İş bedeli (₺)','<input class="inp" id="p-bedel" inputmode="numeric" value="'+esc(sayi(p.bedel)?new Intl.NumberFormat('tr-TR').format(sayi(p.bedel)):'')+'" placeholder="Örn. 45.000">',true)+
-        fld('Notlar','<textarea class="inp" id="p-notlar" placeholder="Mimarın istekleri, revizyon notları…">'+esc(p.notlar)+'</textarea>',true)+
+        fld('Not','<textarea class="inp" id="p-notlar" placeholder="Mimarın istekleri, revizyon notları…">'+esc(p.notlar)+'</textarea>',true)+
       '</form>';
   } else if(M.tur==='onay'){
     ic='<div class="card-h"><h3>'+esc(M.baslik)+'</h3><p>'+esc(M.metin)+'</p></div>';
@@ -684,6 +697,12 @@ function modalHTML(){
       '<button class="btn '+(M.tur==='onay'?'pri danger':'pri')+'" data-act="modalTamam" '+(M.tur==='onay'?'style="background:var(--bad);border-color:var(--bad);color:#fff"':'')+'>'+(M.tur==='onay'?esc(M.dugme||'Sil'):'Kaydet')+'</button></div></div>'+
   '</div></div>';
 }
+function secim(id, deger){
+  return '<div class="secim" id="'+id+'" role="radiogroup">'+SECENEK.map(function(d){
+    return '<button type="button" role="radio" aria-checked="'+(d===deger)+'" class="kutu k-'+d.split(' ')[0]+(d===deger?' on':'')+'" data-deger="'+esc(d)+'">'+(d==='Kapsam dışı'?'Bu işte yok':esc(d))+'</button>';
+  }).join('')+'</div>';
+}
+function secilen(id){ var b=$('#'+id+' .kutu.on'); return b?b.getAttribute('data-deger'):'Bekliyor' }
 function fld(ad, inp, full){ return '<label class="fld'+(full?' full':'')+'"><span>'+ad+'</span>'+inp+'</label>' }
 function iso(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2) }
 
@@ -698,18 +717,22 @@ function baglaApp(){
     drop.addEventListener('drop',function(e){ yukle(e.dataTransfer.files) });
     inp.addEventListener('change',function(){ yukle(inp.files); inp.value='' });
   }
-  ['elektrik','mekanik'].forEach(function(k){
-    var el=$('#q-'+k); if(el) el.addEventListener('change',function(){ hizliDurum(k, el.value) });
-  });
   var f=$('#f'); if(f) f.addEventListener('submit',function(e){ e.preventDefault(); modalTamam() });
-  var kp=$('#p-kapsam');
-  if(kp) kp.addEventListener('change',function(){
-    $('#w-elektrik').hidden = kp.value==='Sadece Mekanik';
-    $('#w-mekanik').hidden = kp.value==='Sadece Elektrik';
+  var pl=$('#p-plan');
+  if(pl) pl.addEventListener('change',function(){
+    var n=pl.files.length; $('#p-plan-ad').textContent = n ? (n===1 ? pl.files[0].name : n+' dosya seçildi') : 'Mimari planı ekleyin';
+    $('#p-plan-drop').classList.toggle('over', n>0);
   });
 }
 
 document.addEventListener('click',function(e){
+  var k=e.target.closest('.secim .kutu');
+  if(k){
+    var grp=k.parentNode;
+    Array.prototype.forEach.call(grp.children,function(b){ b.classList.toggle('on',b===k); b.setAttribute('aria-checked',b===k) });
+    if(grp.id==='q-elektrik'||grp.id==='q-mekanik') hizliDurum(grp.id.slice(2), k.getAttribute('data-deger'));
+    return;
+  }
   var t=e.target.closest('[data-act],[data-mimar],[data-is],[data-filtre],[data-sekme],[data-dsil],[data-grp],[data-yeniis]');
   if(!t) return;
   if(t.hasAttribute('data-grp')){ var g=t.getAttribute('data-grp'); S.kapali[g]=!S.kapali[g]; ciz(); return }
@@ -766,19 +789,23 @@ function modalTamam(){
     if(!v.ad){ err.textContent='Mimarın adını yazın.'; return }
     if(M.id) v.id=M.id;
   } else if(M.tur==='is'){
-    ['mimarId','ad','konum','tur','teslim','sorumlu','oncelik','elektrik','mekanik','bedel','notlar'].forEach(function(k){ v[k]=$('#p-'+k).value.trim() });
+    ['mimarId','ad','bedel','notlar'].forEach(function(k){ v[k]=$('#p-'+k).value.trim() });
     if(!v.mimarId){ err.textContent='İşin geldiği mimarı seçin.'; return }
     if(!v.ad){ err.textContent='İşe bir ad verin.'; return }
     v.bedel=String(sayi(v.bedel)||'');
     v.gelis = M.id ? ((proje(M.id)||{}).gelis || iso(bugun())) : iso(bugun());
-    var kap=$('#p-kapsam').value;
-    if(kap==='Sadece Elektrik') v.mekanik='Kapsam dışı';
-    if(kap==='Sadece Mekanik') v.elektrik='Kapsam dışı';
+    v.elektrik=secilen('p-elektrik'); v.mekanik=secilen('p-mekanik');
+    if(v.elektrik==='Kapsam dışı' && v.mekanik==='Kapsam dışı'){ err.textContent='Elektrik ya da mekaniğin en az biri bu işte olmalı.'; return }
+    if(M.id) v=Object.assign({}, proje(M.id), v);
+    var planlar=Array.prototype.slice.call(($('#p-plan')||{}).files||[]);
     if(M.id) v.id=M.id;
   }
   btn.disabled=true; btn.innerHTML='<span class="spin" style="border-top-color:currentColor"></span>Kaydediliyor';
   if(M.tur==='mimar') call('mimarKaydet',v).then(function(r){ bitti(M.id?'Mimar güncellendi':'Mimar ve klasörü oluşturuldu',function(){ if(!M.id){ S.secMimar=r.id; ciz() } }) }).catch(hataGoster);
-  else if(M.tur==='is') call('projeKaydet',v).then(function(r){ bitti(M.id?'İş güncellendi':(r.kod+' açıldı, klasörleri hazır'),function(){ if(!M.id) ac(r.id) }) }).catch(hataGoster);
+  else if(M.tur==='is') call('projeKaydet',v).then(function(r){ bitti(M.id?'İş güncellendi':(r.kod+' açıldı, klasörleri hazır'),function(){
+    var pid=M.id||r.id;
+    if(!M.id || planlar.length){ ac(pid); S.sekme='mimari'; ciz(); if(planlar.length) yukle(planlar) }
+  }) }).catch(hataGoster);
   else if(M.tur==='onay'){
     call(M.is, M.veri||{id:M.id}).then(function(){
       if(M.is==='projeSil'){ S.acik=null; S.dosyalar=null }
