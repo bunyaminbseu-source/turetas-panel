@@ -375,6 +375,7 @@ var S = {
   modal:null
 };
 var GAS = typeof google !== 'undefined' && google.script && google.script.run;
+var ONIZLEME = !GAS && !window.PANEL_API;
 
 function oku(k){ try{ return localStorage.getItem('pp_'+k) || '' }catch(e){ return '' } }
 function yaz(k,v){ try{ v ? localStorage.setItem('pp_'+k,v) : localStorage.removeItem('pp_'+k) }catch(e){} }
@@ -485,7 +486,7 @@ function girisHTML(){
       '<div class="err" id="g-err"></div>'+
       '<button class="btn pri" type="submit">Panele gir</button>'+
     '</form>'+
-    (GAS?'':'<div class="hint">Önizleme: herhangi bir ad ve şifreyle girip örnek verilerle deneyebilirsiniz.</div>')+
+    (!ONIZLEME?'':'<div class="hint">Önizleme: herhangi bir ad ve şifreyle girip örnek verilerle deneyebilirsiniz.</div>')+
   '</div></div>';
 }
 function baglaGiris(){
@@ -551,7 +552,7 @@ function appHTML(){
   var sekmeler=[{k:'aktif',ad:'Aktif işler',ps:ak},{k:'teslim',ad:'Teslim edilen',ps:te}];
 
   var top='<header class="top"><div class="top-row"><div style="min-width:0">'+
-      '<div class="eyebrow">'+(secili?'Mimar':'Türetaş Mühendislik')+(GAS?'':'<span class="demo">Önizleme · örnek veriler</span>')+'</div>'+
+      '<div class="eyebrow">'+(secili?'Mimar':'Türetaş Mühendislik')+(!ONIZLEME?'':'<span class="demo">Önizleme · örnek veriler</span>')+'</div>'+
       '<h1>'+baslik+'</h1><div class="top-sub">'+alt+'</div></div>'+
       '<div class="actions">'+
         (secili?'<button class="btn ghost hide-m" data-act="mimarDuzenle">Mimarı düzenle</button>':'')+
@@ -963,7 +964,7 @@ S.kisi=oku('kisi'); S.sifre=oku('sifre');
 if(S.kisi && S.sifre){
   S.girildi=true; ciz();
   call('giris').then(function(){ yenile() }).catch(hata);
-} else if(!GAS){
+} else if(ONIZLEME){
   // Önizlemede doğrudan örnek panel açılsın
   S.kisi='Mehmet'; S.sifre='demo'; S.girildi=true; ciz(); yenile();
 } else ciz();
